@@ -74,6 +74,7 @@ public class FXMLController {
 
     @FXML
     void aggiungiCapo(ActionEvent event) {
+    	
     	if(this.TfMarca.getText().trim().isEmpty())
     		this.txtMessaggioAggiungi.setText("Devi scrivere il nome della marca!");
     	else {
@@ -84,11 +85,13 @@ public class FXMLController {
     		String occasione = this.CbOccasione.getValue();
     		String marca = this.TfMarca.getText();
     		
-    		this.model.AggiungiCapo(tipo, sottotipo, colore, stagione, occasione, marca);
-    		this.txtMessaggioAggiungi.setText("Capo d'abbigliamento aggiunto perfettamente!"); 
-    	
+    		if(this.model.esisteCapo(tipo, sottotipo, colore, stagione, occasione, marca))
+    			this.txtMessaggioAggiungi.setText("Questo capo d'abbigliamento è già presente!");
+    		else {
+    			this.model.AggiungiCapo(tipo, sottotipo, colore, stagione, occasione, marca);
+    			this.txtMessaggioAggiungi.setText("Capo d'abbigliamento aggiunto correttamente!"); 
+    		}
     	}
-
     }
 
     @FXML

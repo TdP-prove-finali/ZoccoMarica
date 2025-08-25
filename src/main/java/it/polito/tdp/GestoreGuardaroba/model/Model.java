@@ -16,6 +16,10 @@ public class Model {
 		return this.guardarobaDAO.getCapi();
 	}
 	
+	public boolean esisteCapo(String tipo, String sottotipo, String colore, String stagione, String occasione, String marca) {
+		return this.guardarobaDAO.esisteCapo(tipo, sottotipo, colore, stagione, occasione, marca);
+	}
+	
 	public List<String> getSottotipiByTipo(String tipo) {
 		return this.guardarobaDAO.getSottotipiByTipo(tipo);
 	}

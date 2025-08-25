@@ -41,6 +41,36 @@ public class GuardarobaDAO {
 			}
 	}
 	
+	public boolean esisteCapo(String tipo, String sottotipo, String colore,
+            String stagione, String occasione, String marca) {
+		
+			String sql = "SELECT COUNT(*) AS cnt FROM capo "
+						+ "WHERE tipo = ? AND sottotipo = ? AND colore = ? "
+						+ "AND stagione = ? AND occasione = ? AND marca = ?";
+			
+			try (Connection conn = ConnectDB.getConnection();
+					PreparedStatement st = conn.prepareStatement(sql)) {
+
+				st.setString(1, tipo);
+				st.setString(2, sottotipo);
+				st.setString(3, colore);
+				st.setString(4, stagione);
+				st.setString(5, occasione);
+				st.setString(6, marca);
+
+				ResultSet rs = st.executeQuery();
+				if (rs.next()) {
+					return rs.getInt("cnt") > 0; 
+				}
+
+			} catch (SQLException e) {
+				System.out.println("Errore in Guardaroba DAO");
+				e.printStackTrace();
+			}
+			return false;  //Se il count è 0, il capo non è ancora presente
+	}
+
+		
 	public List<String> getSottotipiByTipo(String tipo) {
 	    String sql = "SELECT DISTINCT sottotipo FROM capo WHERE tipo = ? ORDER BY sottotipo ASC";
 	    List<String> resultSottotipi = new ArrayList<>();
