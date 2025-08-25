@@ -7,8 +7,8 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class ConnectDB {
 	
-	private static final String jdbcURL = "jdbc:mysql://localhost:3306/guardaroba?useSSL=false&serverTimezone=UTC";
-
+	//private static final String jdbcURL = "jdbc:mariadb://localhost:3306/guardaroba?useSSL=false&serverTimezone=UTC";
+	private static final String jdbcURL = "jdbc:mysql://localhost/guardaroba";
 	private static HikariDataSource ds;
 		
 	public static Connection getConnection() {

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.GestoreGuardaroba.FXMLController">
+<BorderPane prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.GestoreGuardaroba.FXMLController">
    <top>
       <Label text="GESTISCI IL TUO GUARDAROBA" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
@@ -66,7 +67,7 @@
                                           <Insets left="60.0" />
                                        </GridPane.margin>
                                     </ChoiceBox>
-                                    <ChoiceBox fx:id="CbSottotipo" prefWidth="150.0" GridPane.columnIndex="1">
+                                    <ChoiceBox fx:id="CbSottotipo" disable="true" prefWidth="150.0" GridPane.columnIndex="1">
                                        <GridPane.margin>
                                           <Insets left="60.0" />
                                        </GridPane.margin>
@@ -163,7 +164,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label text="Filtri:">
                                  <font>
@@ -172,13 +173,13 @@
                               </Label>
                               <GridPane>
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="ALWAYS" />
+                                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="ALWAYS" />
                                 </rowConstraints>
                                  <children>
                                     <Label text="*Stagione:" GridPane.rowIndex="1" />
@@ -207,11 +208,14 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label fx:id="txtMessaggioOutfit">
+                              <TextArea fx:id="txtMessaggioOutfit" editable="false" prefHeight="400.0" prefWidth="200.0" promptText="Risultati...">
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
-                              </Label>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
                            </children>
                         </VBox>
                      </children>

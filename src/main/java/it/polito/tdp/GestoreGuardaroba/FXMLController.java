@@ -1,14 +1,17 @@
 package it.polito.tdp.GestoreGuardaroba;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.GestoreGuardaroba.model.Capo;
 import it.polito.tdp.GestoreGuardaroba.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class FXMLController {
@@ -22,28 +25,28 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ChoiceBox<?> CbColore;
+    private ChoiceBox<String> CbColore;
 
     @FXML
-    private ChoiceBox<?> CbColoreO;
+    private ChoiceBox<String> CbColoreO;
 
     @FXML
-    private ChoiceBox<?> CbOccasione;
+    private ChoiceBox<String> CbOccasione;
 
     @FXML
-    private ChoiceBox<?> CbOccasioneO;
+    private ChoiceBox<String> CbOccasioneO;
 
     @FXML
-    private ChoiceBox<?> CbSottotipo;
+    private ChoiceBox<String> CbSottotipo;
 
     @FXML
-    private ChoiceBox<?> CbStagione;
+    private ChoiceBox<String> CbStagione;
 
     @FXML
-    private ChoiceBox<?> CbStagioneO;
+    private ChoiceBox<String> CbStagioneO;
 
     @FXML
-    private ChoiceBox<?> CbTipo;
+    private ChoiceBox<String> CbTipo;
 
     @FXML
     private TextField TfMarca;
@@ -58,7 +61,7 @@ public class FXMLController {
     private Button btnElimina;
 
     @FXML
-    private ChoiceBox<?> cbCapo;
+    private ChoiceBox<Capo> cbCapo;
 
     @FXML
     private Label txtMessaggioAggiungi;
@@ -67,10 +70,24 @@ public class FXMLController {
     private Label txtMessaggioElimina;
 
     @FXML
-    private Label txtMessaggioOutfit;
+    private TextArea txtMessaggioOutfit;
 
     @FXML
     void aggiungiCapo(ActionEvent event) {
+    	if(this.TfMarca.getText().trim().isEmpty())
+    		this.txtMessaggioAggiungi.setText("Devi scrivere il nome della marca!");
+    	else {
+    		String tipo = this.CbTipo.getValue();
+    		String sottotipo = this.CbSottotipo.getValue();
+    		String colore = this.CbColore.getValue();
+    		String stagione = this.CbStagione.getValue();
+    		String occasione = this.CbOccasione.getValue();
+    		String marca = this.TfMarca.getText();
+    		
+    		this.model.AggiungiCapo(tipo, sottotipo, colore, stagione, occasione, marca);
+    		this.txtMessaggioAggiungi.setText("Capo d'abbigliamento aggiunto perfettamente!"); 
+    	
+    	}
 
     }
 
@@ -82,6 +99,34 @@ public class FXMLController {
     @FXML
     void eliminaCapo(ActionEvent event) {
 
+    }
+    
+    private void checkCampiAggiungi() {
+    	if(this.CbColore.getValue() != null && this.CbOccasione.getValue() != null
+    			&& this.CbSottotipo.getValue() != null && this.CbStagione.getValue() != null 
+    			&& this.CbTipo.getValue() != null && !this.TfMarca.getText().trim().isEmpty())
+    		
+    	this.btnAggiungi.setDisable(false);  	
+    }
+    
+    private void aggiornaSottotipi() {
+    	if(this.CbTipo.getValue() != null) {
+    		this.CbSottotipo.setDisable(false);
+    		String tipo = this.CbTipo.getValue();
+    		List<String> sottotipi = this.model.getSottotipiByTipo(tipo);
+    		this.CbSottotipo.getItems().clear();
+    		this.CbSottotipo.getItems().addAll(sottotipi);
+    	}
+    }
+    
+    private void checkCampoElimina() {
+    	if(this.cbCapo.getValue() != null)    		
+    		this.btnElimina.setDisable(false);  	
+    }
+    
+    private void checkCampiOutfit() {
+    	if(this.CbOccasioneO.getValue() != null && this.CbStagioneO.getValue() != null)    		
+    	this.btnCrea.setDisable(false);  	
     }
 
     @FXML
@@ -102,11 +147,34 @@ public class FXMLController {
         assert txtMessaggioAggiungi != null : "fx:id=\"txtMessaggioAggiungi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtMessaggioElimina != null : "fx:id=\"txtMessaggioElimina\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtMessaggioOutfit != null : "fx:id=\"txtMessaggioOutfit\" was not injected: check your FXML file 'Scene.fxml'.";
-
+        
+        this.CbColore.setOnAction(e -> checkCampiAggiungi());
+        this.CbOccasione.setOnAction(e -> checkCampiAggiungi());
+        this.CbSottotipo.setOnAction(e -> checkCampiAggiungi());
+        this.CbStagione.setOnAction(e -> checkCampiAggiungi());
+        this.CbTipo.setOnAction(e -> checkCampiAggiungi());
+        this.TfMarca.textProperty().addListener((obs, oldVal, newVal) -> checkCampiAggiungi());
+        
+        this.CbTipo.setOnAction(e -> aggiornaSottotipi());
+        
+        this.cbCapo.setOnAction(e -> checkCampoElimina());
+        
+        this.CbOccasioneO.setOnAction(e -> checkCampiOutfit());
+        this.CbStagioneO.setOnAction(e -> checkCampiOutfit());
     }
     
     public void setModel(Model model) {    	
-    	this.model = model;     	    	
+    	this.model = model;
+    	this.CbColore.getItems().addAll(this.model.getColori());
+    	this.CbColoreO.getItems().addAll(this.model.getColori());
+    	this.cbCapo.getItems().addAll(this.model.getCapi());
+    	this.CbOccasione.getItems().addAll("Casual", "Formale", "Sportivo");
+    	this.CbOccasioneO.getItems().addAll("Casual", "Formale", "Sportivo");
+    	this.CbStagione.getItems().addAll("Autunno/Primavera", "Estate", "Inverno");
+    	this.CbStagioneO.getItems().addAll("Autunno/Primavera", "Estate", "Inverno");
+    	this.CbTipo.getItems().addAll("Capospalla", "Inferiore", "Intero", "Scarpe", "Superiore");    	
     }
 
 }
+	
+
