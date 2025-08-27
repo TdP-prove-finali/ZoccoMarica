@@ -150,7 +150,7 @@ public class FXMLController {
     }
     
     private String capitalizeMarca(String m) {
-		String[] marca = m.trim().toLowerCase().split("\\s+"); 
+		String[] parole = m.trim().toLowerCase().split("\\s+"); 
 		
 		/* 
 		   trim() --> rimuovo eventuali spazi all'inizio e alla fine
@@ -158,22 +158,21 @@ public class FXMLController {
 		   split("\\s+") --> divido la stringa in parole usando lo spazio come separatore 
 		*/
 		
-		StringBuilder sb = new StringBuilder();	//costruisco la nuova stringa concatenando le parole con un ciclo
+		String result = "";	//costruisco la nuova stringa concatenando le parole con un ciclo
 		
-		for(String parola : marca) {
-			if(!parola.isEmpty())  {
-				sb.append(Character.toUpperCase(parola.charAt(0))).append(parola.substring(1)).append("");
-			}			
+		for(String parola : parole) {
+			if(!parola.isEmpty())
+				result += parola.substring(0,1).toUpperCase() + parola.substring(1) + " ";		
 		}
 		
 		/* 
 		   !parola.isEmpty() --> controllo che non sia vuota nel caso in cui ci sono spazi multipli tra le parole
-		   Character.toUpperCase(parola.charAt(0)) --> trasformo la prima lettera in maiuscolo
+		   parola.substring(0,1).toUpperCase() --> trasformo la prima lettera in maiuscolo
 		   parola.substring(1) --> prendo il resto della parola così com'è in minuscolo
-		   .append("") --> aggiungo uno spazio dopo la parola
+		   + " " --> aggiungo uno spazio dopo la parola
 		*/
 		
-		return sb.toString().trim(); //converto il StringBuilder in Stringa e rimuovo lo spazio dato dall'ultimo .append("")
+		return result.trim(); //trim() --> rimuovo lo spazio dato dall'ultimo + " "
 	}
 
     @FXML
