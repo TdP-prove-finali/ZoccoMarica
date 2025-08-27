@@ -97,7 +97,7 @@ public class Capo {
 
 	@Override
 	public String toString() {
-		return tipo.toUpperCase() + " " + sottotipo + " - COLORE " + colore + " - MARCA " + marca + "\n";
+		return sottotipo + " - colore " + colore + ", marca " + marca;
 	}
 	
 	

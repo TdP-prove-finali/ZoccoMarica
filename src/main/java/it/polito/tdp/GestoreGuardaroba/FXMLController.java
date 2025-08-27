@@ -75,23 +75,22 @@ public class FXMLController {
     @FXML
     void aggiungiCapo(ActionEvent event) {
     	
-    	if(this.TfMarca.getText().trim().isEmpty())
-    		this.txtMessaggioAggiungi.setText("Devi scrivere il nome della marca!");
-    	else {
     		String tipo = this.CbTipo.getValue();
     		String sottotipo = this.CbSottotipo.getValue();
     		String colore = this.CbColore.getValue();
     		String stagione = this.CbStagione.getValue();
     		String occasione = this.CbOccasione.getValue();
-    		String marca = this.TfMarca.getText();
+    		String marca = this.capitalizeMarca(this.TfMarca.getText());
     		
-    		if(this.model.esisteCapo(tipo, sottotipo, colore, stagione, occasione, marca))
-    			this.txtMessaggioAggiungi.setText("Questo capo d'abbigliamento è già presente!");
+    		Capo c = new Capo (0, tipo, sottotipo, colore, stagione, occasione, marca);    		
+    		
+    		if(this.model.esisteCapo(c))
+    			this.txtMessaggioAggiungi.setText(c + "\n è già presente!");
     		else {
-    			this.model.AggiungiCapo(tipo, sottotipo, colore, stagione, occasione, marca);
-    			this.txtMessaggioAggiungi.setText("Capo d'abbigliamento aggiunto correttamente!"); 
+    			this.model.aggiungiCapo(c);
+    			this.txtMessaggioAggiungi.setText(c + "\n è stato aggiunto correttamente!");
+    			this.aggiornaCapi();
     		}
-    	}
     }
 
     @FXML
@@ -101,10 +100,18 @@ public class FXMLController {
 
     @FXML
     void eliminaCapo(ActionEvent event) {
-
+    	Capo c = this.cbCapo.getValue();
+    	
+    	if(this.model.eliminaCapo(c)) {
+    		this.txtMessaggioElimina.setText(c +"\n è stato eliminato correttamente!");
+    		this.aggiornaCapi();
+    	}
     }
     
     private void checkCampiAggiungi() {
+    	this.txtMessaggioAggiungi.setText("");
+    	this.btnAggiungi.setDisable(true);
+    	
     	if(this.CbColore.getValue() != null && this.CbOccasione.getValue() != null
     			&& this.CbSottotipo.getValue() != null && this.CbStagione.getValue() != null 
     			&& this.CbTipo.getValue() != null && !this.TfMarca.getText().trim().isEmpty())
@@ -122,15 +129,52 @@ public class FXMLController {
     	}
     }
     
+    private void aggiornaCapi() {  //aggiorno la lista nel ChoiceBox quando aggiungo o elimino un capo
+    	this.cbCapo.getItems().clear();
+		this.cbCapo.getItems().addAll(this.model.getCapi());
+    }
+    
     private void checkCampoElimina() {
-    	if(this.cbCapo.getValue() != null)    		
-    		this.btnElimina.setDisable(false);  	
+    	
+    	this.btnElimina.setDisable(true);
+    	
+    	if(this.cbCapo.getValue() != null) {     		
+    		this.btnElimina.setDisable(false);
+    		this.txtMessaggioElimina.setText("");
+    	}
     }
     
     private void checkCampiOutfit() {
     	if(this.CbOccasioneO.getValue() != null && this.CbStagioneO.getValue() != null)    		
     	this.btnCrea.setDisable(false);  	
     }
+    
+    private String capitalizeMarca(String m) {
+		String[] marca = m.trim().toLowerCase().split("\\s+"); 
+		
+		/* 
+		   trim() --> rimuovo eventuali spazi all'inizio e alla fine
+		   toLowerCase() --> converto tutto in minuscolo
+		   split("\\s+") --> divido la stringa in parole usando lo spazio come separatore 
+		*/
+		
+		StringBuilder sb = new StringBuilder();	//costruisco la nuova stringa concatenando le parole con un ciclo
+		
+		for(String parola : marca) {
+			if(!parola.isEmpty())  {
+				sb.append(Character.toUpperCase(parola.charAt(0))).append(parola.substring(1)).append("");
+			}			
+		}
+		
+		/* 
+		   !parola.isEmpty() --> controllo che non sia vuota nel caso in cui ci sono spazi multipli tra le parole
+		   Character.toUpperCase(parola.charAt(0)) --> trasformo la prima lettera in maiuscolo
+		   parola.substring(1) --> prendo il resto della parola così com'è in minuscolo
+		   .append("") --> aggiungo uno spazio dopo la parola
+		*/
+		
+		return sb.toString().trim(); //converto il StringBuilder in Stringa e rimuovo lo spazio dato dall'ultimo .append("")
+	}
 
     @FXML
     void initialize() {

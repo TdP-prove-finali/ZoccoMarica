@@ -12,7 +12,7 @@ public class GuardarobaDAO {
 	
 	public List<Capo> getCapi() {
 		String sql = "SELECT * "
-				+ "FROM capo ";
+				+ "FROM capo ORDER BY sottotipo";
 		
 		List <Capo> resultCapo= new ArrayList<>();
 		
@@ -41,8 +41,7 @@ public class GuardarobaDAO {
 			}
 	}
 	
-	public boolean esisteCapo(String tipo, String sottotipo, String colore,
-            String stagione, String occasione, String marca) {
+	public boolean esisteCapo(Capo c) {
 		
 			String sql = "SELECT COUNT(*) AS cnt FROM capo "
 						+ "WHERE tipo = ? AND sottotipo = ? AND colore = ? "
@@ -51,12 +50,12 @@ public class GuardarobaDAO {
 			try (Connection conn = ConnectDB.getConnection();
 					PreparedStatement st = conn.prepareStatement(sql)) {
 
-				st.setString(1, tipo);
-				st.setString(2, sottotipo);
-				st.setString(3, colore);
-				st.setString(4, stagione);
-				st.setString(5, occasione);
-				st.setString(6, marca);
+				st.setString(1, c.getTipo());
+		        st.setString(2, c.getSottotipo());
+		        st.setString(3, c.getColore());
+		        st.setString(4, c.getStagione());
+		        st.setString(5, c.getOccasione());
+		        st.setString(6, c.getMarca());
 
 				ResultSet rs = st.executeQuery();
 				if (rs.next()) {
@@ -72,7 +71,7 @@ public class GuardarobaDAO {
 
 		
 	public List<String> getSottotipiByTipo(String tipo) {
-	    String sql = "SELECT DISTINCT sottotipo FROM capo WHERE tipo = ? ORDER BY sottotipo ASC";
+	    String sql = "SELECT DISTINCT sottotipo FROM capo WHERE tipo = ? ORDER BY sottotipo";
 	    List<String> resultSottotipi = new ArrayList<>();
 
 	    try {
@@ -126,7 +125,7 @@ public class GuardarobaDAO {
 	}
 
 	
-	public boolean AggiungiCapo(String tipo, String sottotipo, String colore, String stagione, String occasione, String marca) {
+	public boolean aggiungiCapo(Capo c) {
 		
 		String sql = "INSERT INTO capo (tipo, sottotipo, colore, stagione, occasione, marca) "
 	               + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -135,12 +134,12 @@ public class GuardarobaDAO {
 	        Connection conn = ConnectDB.getConnection();
 	        PreparedStatement st = conn.prepareStatement(sql);
 
-	        st.setString(1, tipo);
-	        st.setString(2, sottotipo);
-	        st.setString(3, colore);
-	        st.setString(4, stagione);
-	        st.setString(5, occasione);
-	        st.setString(6, marca);
+	        st.setString(1, c.getTipo());
+	        st.setString(2, c.getSottotipo());
+	        st.setString(3, c.getColore());
+	        st.setString(4, c.getStagione());
+	        st.setString(5, c.getOccasione());
+	        st.setString(6, c.getMarca());
 
 	        st.executeUpdate();
 
@@ -155,5 +154,32 @@ public class GuardarobaDAO {
 	    }
 		
 	}
+	
+	public boolean eliminaCapo(Capo c) {
+		
+		String sql = "DELETE FROM capo "
+	               + "WHERE tipo = ? AND sottotipo = ? "
+	               + "AND colore = ? AND stagione = ? "
+	               + "AND occasione = ? AND marca = ?";
 
+	    try (Connection conn = ConnectDB.getConnection();
+	         PreparedStatement st = conn.prepareStatement(sql)) {
+
+	        st.setString(1, c.getTipo());
+	        st.setString(2, c.getSottotipo());
+	        st.setString(3, c.getColore());
+	        st.setString(4, c.getStagione());
+	        st.setString(5, c.getOccasione());
+	        st.setString(6, c.getMarca());
+
+	        int rows = st.executeUpdate();
+	        return rows > 0;  //ritorna true se è stato eliminato un capo
+
+	    } catch (SQLException e) {
+	    	System.out.println("Errore in Guardaroba DAO");
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	
 }

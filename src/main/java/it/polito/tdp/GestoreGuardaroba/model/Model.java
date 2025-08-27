@@ -16,8 +16,8 @@ public class Model {
 		return this.guardarobaDAO.getCapi();
 	}
 	
-	public boolean esisteCapo(String tipo, String sottotipo, String colore, String stagione, String occasione, String marca) {
-		return this.guardarobaDAO.esisteCapo(tipo, sottotipo, colore, stagione, occasione, marca);
+	public boolean esisteCapo(Capo c) {
+		return this.guardarobaDAO.esisteCapo(c);
 	}
 	
 	public List<String> getSottotipiByTipo(String tipo) {
@@ -28,8 +28,12 @@ public class Model {
 		return this.guardarobaDAO.getColori();
 	}
 	
-	public boolean AggiungiCapo(String tipo, String sottotipo, String colore, String stagione, String occasione, String marca) {
-		return this.guardarobaDAO.AggiungiCapo(tipo, sottotipo, colore, stagione, occasione, marca);
+	public boolean aggiungiCapo(Capo c) {
+		return this.guardarobaDAO.aggiungiCapo(c);
+	}
+	
+	public boolean eliminaCapo(Capo c) {
+		return this.guardarobaDAO.eliminaCapo(c);
 	}
 
 }
