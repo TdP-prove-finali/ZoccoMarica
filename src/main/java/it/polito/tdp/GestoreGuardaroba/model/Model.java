@@ -39,6 +39,10 @@ public class Model {
 		return this.guardarobaDAO.getColori();
 	}
 	
+	public List<Abbinamento> getAbbinamenti() {
+		return this.guardarobaDAO.getAbbinamenti();
+	}
+	
 	public boolean aggiungiCapo(Capo c) {
 		return this.guardarobaDAO.aggiungiCapo(c);
 	}
@@ -55,14 +59,12 @@ public class Model {
 		Graphs.addAllVertices(this.grafo, idMap.values());
 		
 		List <Adiacenza> archi = new ArrayList<>();		
-		List<Abbinamento> abbinamenti = this.guardarobaDAO.getAbbinamenti();
-		
 		this.idColoriMap = new HashMap<>();
 		
-		for(Colore c : this.guardarobaDAO.getColori()) 
+		for(Colore c : this.getColori()) 
 			idColoriMap.put(c.getId(), c);
 		
-		for (Abbinamento abb : abbinamenti) {
+		for (Abbinamento abb : this.getAbbinamenti()) {
 	        Colore col1 = idColoriMap.get(abb.getId_colore());
 	        Colore col2 = idColoriMap.get(abb.getId_abbinato());
 
