@@ -1,5 +1,7 @@
 package it.polito.tdp.GestoreGuardaroba.model;
 
+import java.util.Objects;
+
 public class Colore {
 	
 	private int id;
@@ -26,14 +28,28 @@ public class Colore {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Colore other = (Colore) obj;
+		return id == other.id;
+	}
 
 	@Override
 	public String toString() {
 		return nome + "\n";
 	}
-	
-	
-	
 	
 
 }

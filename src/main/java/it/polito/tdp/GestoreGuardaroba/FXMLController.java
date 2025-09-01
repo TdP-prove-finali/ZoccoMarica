@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.GestoreGuardaroba.model.Capo;
+import it.polito.tdp.GestoreGuardaroba.model.Colore;
 import it.polito.tdp.GestoreGuardaroba.model.Model;
+import it.polito.tdp.GestoreGuardaroba.model.Outfit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,10 +27,10 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ChoiceBox<String> CbColore;
+    private ChoiceBox<Colore> CbColore;
 
     @FXML
-    private ChoiceBox<String> CbColoreO;
+    private ChoiceBox<Colore> CbColoreO;
 
     @FXML
     private ChoiceBox<String> CbOccasione;
@@ -77,10 +79,10 @@ public class FXMLController {
     	
     		String tipo = this.CbTipo.getValue();
     		String sottotipo = this.CbSottotipo.getValue();
-    		String colore = this.CbColore.getValue();
+    		String colore = this.CbColore.getValue().getNome();
     		String stagione = this.CbStagione.getValue();
     		String occasione = this.CbOccasione.getValue();
-    		String marca = this.capitalizeMarca(this.TfMarca.getText());
+    		String marca = this.model.capitalizeMarca(this.TfMarca.getText());
     		
     		Capo c = new Capo (0, tipo, sottotipo, colore, stagione, occasione, marca);    		
     		
@@ -95,7 +97,34 @@ public class FXMLController {
 
     @FXML
     void creaOutfit(ActionEvent event) {
-
+    	this.txtMessaggioOutfit.clear();
+    	
+    	String stagione = this.CbStagioneO.getValue();
+    	String occasione = this.CbOccasioneO.getValue();
+    	Colore colore = this.CbColoreO.getValue();
+    	    	
+    	List<Outfit> outfits=this.model.creaOutfit(stagione, occasione, colore);
+    	
+    	if(outfits.isEmpty())
+    		this.txtMessaggioOutfit.appendText("Non ci sono outfit possibili!");
+    	else {
+    	
+    		this.txtMessaggioOutfit.appendText("Tutti gli outfit con stagione " + stagione + ", occasione " + occasione);
+    	
+    		if(colore != null)
+    			this.txtMessaggioOutfit.appendText(", colore " + colore);
+    	
+    		this.txtMessaggioOutfit.appendText(" sono: \n\n");
+    	
+    		for (Outfit o: outfits)
+    			this.txtMessaggioOutfit.appendText(o.toString() + "\n\n");
+    	}
+    	
+    	//pulisco tutto per una nuova ricerca
+    	this.CbStagioneO.getSelectionModel().clearSelection();
+    	this.CbOccasioneO.getSelectionModel().clearSelection();
+    	this.CbColoreO.getSelectionModel().clearSelection();
+    	this.btnCrea.setDisable(true);
     }
 
     @FXML
@@ -134,8 +163,7 @@ public class FXMLController {
 		this.cbCapo.getItems().addAll(this.model.getCapi());
     }
     
-    private void checkCampoElimina() {
-    	
+    private void checkCampoElimina() {    	
     	this.btnElimina.setDisable(true);
     	
     	if(this.cbCapo.getValue() != null) {     		
@@ -149,31 +177,6 @@ public class FXMLController {
     	this.btnCrea.setDisable(false);  	
     }
     
-    private String capitalizeMarca(String m) {
-		String[] parole = m.trim().toLowerCase().split("\\s+"); 
-		
-		/* 
-		   trim() --> rimuovo eventuali spazi all'inizio e alla fine
-		   toLowerCase() --> converto tutto in minuscolo
-		   split("\\s+") --> divido la stringa in parole usando lo spazio come separatore 
-		*/
-		
-		String result = "";	//costruisco la nuova stringa concatenando le parole con un ciclo
-		
-		for(String parola : parole) {
-			if(!parola.isEmpty())
-				result += parola.substring(0,1).toUpperCase() + parola.substring(1) + " ";		
-		}
-		
-		/* 
-		   !parola.isEmpty() --> controllo che non sia vuota nel caso in cui ci sono spazi multipli tra le parole
-		   parola.substring(0,1).toUpperCase() --> trasformo la prima lettera in maiuscolo
-		   parola.substring(1) --> prendo il resto della parola così com'è in minuscolo
-		   + " " --> aggiungo uno spazio dopo la parola
-		*/
-		
-		return result.trim(); //trim() --> rimuovo lo spazio dato dall'ultimo + " "
-	}
 
     @FXML
     void initialize() {
@@ -212,6 +215,7 @@ public class FXMLController {
     public void setModel(Model model) {    	
     	this.model = model;
     	this.CbColore.getItems().addAll(this.model.getColori());
+    	this.CbColoreO.getItems().addFirst(null); //prima riga vuota dato che la scelta del colore è facoltativa
     	this.CbColoreO.getItems().addAll(this.model.getColori());
     	this.cbCapo.getItems().addAll(this.model.getCapi());
     	this.CbOccasione.getItems().addAll("Casual", "Formale", "Sportivo");
