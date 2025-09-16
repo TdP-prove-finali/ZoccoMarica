@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `abbinamento` (
   CONSTRAINT `abbinamento_ibfk_2` FOREIGN KEY (`id_abbinato`) REFERENCES `colore` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dump dei dati della tabella guardaroba.abbinamento: ~238 rows (circa)
+-- Dump dei dati della tabella guardaroba.abbinamento: ~220 rows (circa)
 INSERT INTO `abbinamento` (`id_colore`, `id_abbinato`) VALUES
 	(1, 1),
 	(1, 2),
@@ -280,9 +280,9 @@ CREATE TABLE IF NOT EXISTS `capo` (
   `occasione` varchar(50) DEFAULT NULL,
   `marca` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=222 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=251 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dump dei dati della tabella guardaroba.capo: ~161 rows (circa)
+-- Dump dei dati della tabella guardaroba.capo: ~170 rows (circa)
 INSERT INTO `capo` (`id`, `tipo`, `sottotipo`, `colore`, `stagione`, `occasione`, `marca`) VALUES
 	(1, 'Capospalla', 'Giacca', 'Nero', 'Autunno/Primavera', 'Formale', 'Zara'),
 	(2, 'Capospalla', 'Piumino', 'Blu', 'Inverno', 'Casual', 'North Face'),
@@ -444,7 +444,16 @@ INSERT INTO `capo` (`id`, `tipo`, `sottotipo`, `colore`, `stagione`, `occasione`
 	(198, 'Superiore', 'Blusa', 'Beige', 'Estate', 'Casual', 'Primark'),
 	(199, 'Superiore', 'Canottiera', 'Bianco', 'Estate', 'Sportivo', 'Vans'),
 	(200, 'Superiore', 'Canottiera', 'Giallo', 'Estate', 'Casual', 'Mango'),
-	(201, 'Superiore', 'Maglione', 'Blu', 'Inverno', 'Formale', 'Zara');
+	(201, 'Superiore', 'Maglione', 'Blu', 'Inverno', 'Formale', 'Zara'),
+	(223, 'Superiore', 'Canottiera', 'Fucsia', 'Estate', 'Sportivo', 'Diadora'),
+	(240, 'Superiore', 'Maglietta', 'Lilla', 'Estate', 'Casual', 'Ovs'),
+	(243, 'Superiore', 'Camicia', 'Verde', 'Autunno/Primavera', 'Casual', 'Mango'),
+	(244, 'Intero', 'Abito corto', 'Verde', 'Autunno/Primavera', 'Casual', 'Piazza Italia'),
+	(245, 'Superiore', 'Maglietta', 'Rosso', 'Autunno/Primavera', 'Sportivo', 'Puma'),
+	(246, 'Inferiore', 'Leggins', 'Blu', 'Autunno/Primavera', 'Sportivo', 'Diadora'),
+	(248, 'Capospalla', 'Giacca', 'Bianco', 'Autunno/Primavera', 'Sportivo', 'Converse'),
+	(249, 'Superiore', 'Maglione', 'Arancione', 'Inverno', 'Casual', 'Piazza Italia'),
+	(250, 'Superiore', 'Polo', 'Arancione', 'Autunno/Primavera', 'Casual', 'Primark');
 
 -- Dump della struttura di tabella guardaroba.colore
 CREATE TABLE IF NOT EXISTS `colore` (
