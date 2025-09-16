@@ -48,7 +48,7 @@ public class Colore {
 
 	@Override
 	public String toString() {
-		return nome + "\n";
+		return nome;
 	}
 	
 

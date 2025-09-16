@@ -103,9 +103,9 @@ public class FXMLController {
     	String occasione = this.CbOccasioneO.getValue();
     	Colore colore = this.CbColoreO.getValue();
     	    	
-    	List<Outfit> outfits=this.model.creaOutfit(stagione, occasione, colore);
+    	List<Outfit> outfit=this.model.creaOutfit(stagione, occasione, colore);
     	
-    	if(outfits.isEmpty())
+    	if(outfit == null || outfit.isEmpty())
     		this.txtMessaggioOutfit.appendText("Non ci sono outfit possibili!");
     	else {
     	
@@ -116,7 +116,7 @@ public class FXMLController {
     	
     		this.txtMessaggioOutfit.appendText(" sono: \n\n");
     	
-    		for (Outfit o: outfits)
+    		for (Outfit o: outfit)
     			this.txtMessaggioOutfit.appendText(o.toString() + "\n\n");
     	}
     	

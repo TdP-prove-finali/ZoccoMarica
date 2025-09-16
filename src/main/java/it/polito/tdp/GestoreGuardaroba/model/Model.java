@@ -51,7 +51,7 @@ public class Model {
 		return this.guardarobaDAO.eliminaCapo(c);
 	}
 	
-	private void creaGrafo(String stagione, String occasione, Colore colore) {
+	private void creaGrafo(String stagione, String occasione) {
 		this.grafo = new SimpleGraph<>(DefaultEdge.class);
 		this.idMap = new HashMap<>();
 		
@@ -77,14 +77,8 @@ public class Model {
 	                         c2.getColore().equalsIgnoreCase(col2.getNome())) ||
 	                        (c1.getColore().equalsIgnoreCase(col2.getNome()) &&
 	                         c2.getColore().equalsIgnoreCase(col1.getNome()))) {
-	                    	
-	                    	//almeno uno dei due capi deve avere il colore selezionato dall'utente (se è stato scelto)
-	                        if (colore == null ||
-	                            c1.getColore().equalsIgnoreCase(colore.getNome()) ||
-	                            c2.getColore().equalsIgnoreCase(colore.getNome())) {
 
-	                            archi.add(new Adiacenza(c1, c2));
-	                        }
+	                            archi.add(new Adiacenza(c1, c2));     
 	                    }
 	                }
 	            }
@@ -96,9 +90,10 @@ public class Model {
 	}
 	
 	public List<Outfit> creaOutfit(String stagione, String occasione, Colore colore) {
-	    this.creaGrafo(stagione, occasione, colore);
+	    this.creaGrafo(stagione, occasione);
 
 	    List<Outfit> result = new ArrayList<>();
+	    List<Outfit> result_colore = new ArrayList<>();
 
 	    List<Capo> interi = new ArrayList<>();
 	    List<Capo> superiori = new ArrayList<>();
@@ -158,10 +153,27 @@ public class Model {
 	            }
 	        }
 	    }
-
+	    
+	    if(colore!= null) { //almeno un capo deve avere il colore selezionato
+	    	for(Outfit o : result) {
+    		if(this.capoHaColore(o.getCapospalla(), colore) || this.capoHaColore(o.getInferiore(), colore)
+    				|| this.capoHaColore(o.getIntero(), colore) || this.capoHaColore(o.getScarpe(), colore)
+    				|| this.capoHaColore(o.getSuperiore(), colore))
+    			result_colore.add(o);
+	    	}
+	    	
+	    return result_colore; 
+	    }
+	    
 	    return result;
 	}
-
+	
+	private boolean capoHaColore(Capo capo, Colore colore) {
+		if(capo == null)
+			return false;
+		else 
+			return capo.getColore().equalsIgnoreCase(colore.getNome());	
+	}
 	
 	public String capitalizeMarca(String m) {
 		String[] parole = m.trim().toLowerCase().split("\\s+"); 
